@@ -15,7 +15,7 @@ public class ThirdPersonCamera : MonoBehaviour {
     Vector3 currentRotation;
 
     float mouseX, mouseY, mouseScroll;
-
+    
     void Start () {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

@@ -6,12 +6,14 @@ namespace RPG.Control {
     public class ThirdPersonCharacterController : MonoBehaviour {
 
         [SerializeField] float gravity = -10f;
+        [SerializeField] float sneakSpeed = 1f;
         [SerializeField] float walkSpeed = 2f;
         [SerializeField] float runSpeed = 6f;
         [SerializeField] float speedSmoothTime = 0.15f;
         [SerializeField] float turnSmoothTime = 0.2f;
-        [SerializeField] float walkingAnimationSpeed = .5f;
-        [SerializeField] float runningAnimationSpeed = 1f;
+        [SerializeField] float sneakingAnimationSpeed = .5f;
+        [SerializeField] float walkingAnimationSpeed = 1f;
+        [SerializeField] float runningAnimationSpeed = 1.5f;
         [SerializeField] float attackCooldown = .5f;
         [SerializeField] float attackTime = .5f;
         private State state;
@@ -27,6 +29,8 @@ namespace RPG.Control {
         private float timeAttacking;
         private float timeSinceLastAttack;
 
+        bool running = false;
+        bool sneaking = false;
         float turnSmoothVelocity;
         float speedSmoothVelocity;
         float currentSpeed;
@@ -53,17 +57,17 @@ namespace RPG.Control {
                 case State.Normal:
                     if (!Input.anyKeyDown) { timeSinceLastInput += Time.deltaTime; } else { timeSinceLastInput = 0; }
                     Movement ();
-                    CheckAttack ();
+                    // CheckAttack ();
                     break;
                 case State.Attacking:
-                    Attacking ();
+                    // Attacking ();
                     break;
             }
         }
 
         private void Movement () {
+            CheckSpeedAlteration ();
 
-            bool running = Input.GetKey (KeyCode.LeftShift);
             Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
             Vector2 inputDir = input.normalized;
 
@@ -71,7 +75,7 @@ namespace RPG.Control {
                 float targetRotation = Mathf.Atan2 (inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
                 transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle (transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
             }
-            float targetSpeed = ((running) ? runSpeed : walkSpeed) * inputDir.magnitude;
+            float targetSpeed = ((running) ? runSpeed : (sneaking) ? sneakSpeed : walkSpeed) * inputDir.magnitude;
             currentSpeed = Mathf.SmoothDamp (currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
 
             HandleMovement ();
@@ -80,8 +84,18 @@ namespace RPG.Control {
                 velocityY = 0;
             }
 
-            float animationSpeed = ((running) ? runningAnimationSpeed : walkingAnimationSpeed) * inputDir.magnitude;
+            float animationSpeed = ((running) ? runningAnimationSpeed : (sneaking) ? sneakingAnimationSpeed : walkingAnimationSpeed) * inputDir.magnitude;
             animator.SetFloat ("forwardSpeed", animationSpeed, speedSmoothTime, Time.deltaTime);
+        }
+
+        private void CheckSpeedAlteration () {
+            if (Input.GetKey (KeyCode.LeftShift)) {
+                running = true;
+                sneaking = false;
+            } else if (Input.GetMouseButton (1)) {
+                running = false;
+                sneaking = true;
+            } else { running = false; sneaking = false; }
         }
 
         private void HandleMovement () {
@@ -90,24 +104,24 @@ namespace RPG.Control {
             controller.Move (velocity * Time.deltaTime);
         }
 
-        private void CheckAttack () {
-            timeSinceLastAttack += Time.deltaTime;
-            if (Input.GetMouseButtonDown (0) && timeSinceLastAttack > attackCooldown) {
-                animator.SetTrigger ("attack");
-                animator.SetFloat ("attackMotion", UnityEngine.Random.Range (0, 4));
-                state = State.Attacking;
-                timeSinceLastAttack = 0f;
-                return;
-            }
-        }
+        // private void CheckAttack () {
+        //     timeSinceLastAttack += Time.deltaTime;
+        //     if (Input.GetMouseButtonDown (0) && timeSinceLastAttack > attackCooldown) {
+        //         animator.SetTrigger ("attack");
+        //         animator.SetFloat ("attackMotion", UnityEngine.Random.Range (0, 4));
+        //         state = State.Attacking;
+        //         timeSinceLastAttack = 0f;
+        //         return;
+        //     }
+        // }
 
-        private void Attacking () {
-            if (timeAttacking > attackTime) {
-                timeAttacking = 0;
-                state = State.Normal;
-                print ("Stopping Attack");
-            }
-            timeAttacking += Time.deltaTime;
-        }
+        // private void Attacking () {
+        //     if (timeAttacking > attackTime) {
+        //         timeAttacking = 0;
+        //         state = State.Normal;
+        //         print ("Stopping Attack");
+        //     }
+        //     timeAttacking += Time.deltaTime;
+        // }
     }
 }
