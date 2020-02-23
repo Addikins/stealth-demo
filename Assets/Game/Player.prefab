@@ -58,7 +58,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -99,8 +99,8 @@ MonoBehaviour:
   rotationSpeed: 3
   scrollSpeed: 6
   target: {fileID: 5989449347424441983}
-  distanceFromTarget: 5.5
-  distanceMinMax: {x: 3.5, y: 5.5}
+  distanceFromTarget: 4
+  distanceMinMax: {x: 4.5, y: 6.5}
   verticalMinMax: {x: 15, y: 15}
   rotationSmoothTime: 0.12
 --- !u!1 &5989449348428990473
@@ -115,9 +115,10 @@ GameObject:
   - component: {fileID: 5989449348428990474}
   - component: {fileID: 5989449348428990468}
   - component: {fileID: 5989449348428990469}
+  - component: {fileID: 570226649}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,17 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf166a9b876db34c8866634173c4bac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -10
-  sneakSpeed: 1
-  walkSpeed: 2
-  runSpeed: 6
-  speedSmoothTime: 0.15
   turnSmoothTime: 0.2
-  sneakingAnimationSpeed: 0.5
-  walkingAnimationSpeed: 1
-  runningAnimationSpeed: 1.5
-  attackCooldown: 0.5
-  attackTime: 0.5
 --- !u!143 &5989449348428990469
 CharacterController:
   m_ObjectHideFlags: 0
@@ -198,6 +189,26 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!114 &570226649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5989449348428990473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20fa8a7f6957e164c9df26d010c3a829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: -10
+  sneakSpeed: 1
+  walkSpeed: 3
+  runSpeed: 6
+  speedSmoothTime: 0.15
+  sneakingAnimationSpeed: 1
+  walkingAnimationSpeed: 2
+  runningAnimationSpeed: 3
 --- !u!1001 &5989449347424308439
 PrefabInstance:
   m_ObjectHideFlags: 0
