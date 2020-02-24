@@ -38,7 +38,7 @@ namespace StealthGame.Control
             {
                 case State.Normal:
                     if (!Input.anyKeyDown) { timeSinceLastInput += Time.deltaTime; } else { timeSinceLastInput = 0; }
-                    HandleMovement();
+                    GetInput();
                     // CheckAttack ();
                     break;
                 case State.Attacking:
@@ -47,7 +47,7 @@ namespace StealthGame.Control
             }
         }
 
-        private void HandleMovement()
+        private void GetInput()
         {
 
             Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));

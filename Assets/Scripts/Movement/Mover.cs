@@ -32,14 +32,7 @@ namespace StealthGame.Movement
         void Start()
         {
             animator = GetComponent<Animator>();
-            currentSpeed = walkSpeed;
             controller = GetComponent<CharacterController>();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         public void HandleMovement(Vector2 direction)
@@ -51,8 +44,8 @@ namespace StealthGame.Movement
 
             velocityY += gravity * Time.deltaTime;
             velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
-            controller.Move(velocity * Time.deltaTime);
 
+            controller.Move(velocity * Time.deltaTime);
             if (controller.isGrounded)
             {
                 velocityY = 0;
@@ -64,21 +57,17 @@ namespace StealthGame.Movement
 
         private void CheckSpeedAlteration()
         {
-            if (gameObject.CompareTag("Player"))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    running = true;
-                    sneaking = false;
-                }
-                else if (Input.GetMouseButton(1))
-                {
-                    running = false;
-                    sneaking = true;
-                }
-                else { running = false; sneaking = false; }
+                running = true;
+                sneaking = false;
             }
+            else if (Input.GetMouseButton(1))
+            {
+                running = false;
+                sneaking = true;
+            }
+            else { running = false; sneaking = false; }
         }
     }
 }
