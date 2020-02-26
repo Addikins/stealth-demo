@@ -131,7 +131,6 @@ namespace StealthGame.Control
             direction = Vector3.Distance(destination, transform.position);
             agent.speed = speed;
             agent.destination = destination;
-            print(speed);
         }
 
         private void UpdateAnimation()

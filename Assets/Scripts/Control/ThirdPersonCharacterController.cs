@@ -10,9 +10,11 @@ namespace StealthGame.Control
         //[SerializeField] float attackCooldown = .5f;
         //[SerializeField] float attackTime = .5f;
         [SerializeField] float turnSmoothTime = 0.2f;
+        [SerializeField] Light flashlight;
 
         float turnSmoothVelocity;
         float timeSinceLastInput;
+        bool isLightOn = false;
 
         Transform cameraT;
         Mover mover;
@@ -34,20 +36,13 @@ namespace StealthGame.Control
 
         void Update()
         {
-            switch (state)
-            {
-                case State.Normal:
-                    if (!Input.anyKeyDown) { timeSinceLastInput += Time.deltaTime; } else { timeSinceLastInput = 0; }
-                    GetInput();
-                    // CheckAttack ();
-                    break;
-                case State.Attacking:
-                    // Attacking ();
-                    break;
-            }
+            mover.HandleMovement(GetInputDir());
+            if (Input.GetKeyDown(KeyCode.Space)) { isLightOn = !isLightOn; }
+
+            flashlight.gameObject.SetActive(isLightOn);
         }
 
-        private void GetInput()
+        private Vector2 GetInputDir()
         {
 
             Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -58,8 +53,7 @@ namespace StealthGame.Control
                 float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + cameraT.eulerAngles.y;
                 transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
             }
-
-            mover.HandleMovement(inputDir);
+            return inputDir;
         }
 
         // private void CheckAttack () {
