@@ -2289,7 +2289,7 @@ MonoBehaviour:
   speedSmoothTime: 0.15
   sneakingAnimationSpeed: 1.5
   walkingAnimationSpeed: 3
-  runningAnimationSpeed: 6
+  runningAnimationSpeed: 4.7
 --- !u!1 &3627085127452372647
 GameObject:
   m_ObjectHideFlags: 0
